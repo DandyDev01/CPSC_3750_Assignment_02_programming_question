@@ -17,6 +17,7 @@ class MainController:
         self.agentO = agentO
         self.defaultStartState = Grid(defaultInitialState)
 
+    # starts the program
     def run(self):
         self.startView.print_message("Welcome to Tic-tac-toe.")
         self.startView.print_message("Enter one of the following.")
@@ -39,6 +40,7 @@ class MainController:
         elif playMode == "2":
             self.AI_vs_AI(gameState)
 
+    # plays game with user vs. AI
     def player_vs_AI(self, gameState:Grid):
         coordinateGrid = Grid(self.coords)
         self.startView.print_message("Enter coordinates in the form (x, y)")
@@ -55,6 +57,7 @@ class MainController:
             gameState = self.agentO.make_move(gameState)
             self.gridView.display(gameState)
 
+    # verify the user input for a move is allowed
     def varify_coords(self, coords:str, gameState:Grid):
         coords = coords.replace(" ", "").strip()
         
@@ -72,11 +75,13 @@ class MainController:
 
         return True
 
+    # extract coordinates from user input
     def get_xy(self, coords:str):
         coords = coords.replace(" ", "")
         cell = Cell(int(coords[0]), int(coords[2]), " ")
         return cell
 
+    # have user input desired play
     def get_player_move(self, gameState:Grid):
         coords = self.startView.get_input("Enter coorinates for move:")
         while self.varify_coords(coords, gameState) == False:
@@ -85,6 +90,7 @@ class MainController:
         
         return self.get_xy(coords)
 
+    # plays game with AI vs. AI
     def AI_vs_AI(self, gameState:Grid):
         while len(gameState.get_empty_cells()) > 0:
             gameState = self.agentX.make_move(gameState)
