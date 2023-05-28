@@ -26,7 +26,7 @@ class Agent:
             return copy
 
         root = Node(board)
-        bestMove = self.minimax_Descision(root, True)
+        bestMove = self.minimax_Descision(root, -math.inf, math.inf, True)
         
         for i in range(0, len(root.children)):
             hasBest = self.find(root.children[i], bestMove)
@@ -50,7 +50,7 @@ class Agent:
 
         return b
 
-    def minimax_Descision(self, board:Node, maximizingAgent:bool):
+    def minimax_Descision(self, board:Node, a:int, b:int, maximizingAgent:bool):
         if self.has_goal(board.grid, self.team):
             board.score = 1
             return board
@@ -62,12 +62,11 @@ class Agent:
             return board
         
         if maximizingAgent:
-            return self.max_value(board, True)
+            return self.max_value(board, a, b, True)
         else:
-            return self.min_value(board, False)
+            return self.min_value(board, a, b, False)
 
-    # @returns: a grid
-    def min_value(self, board:Node, maximizingAgent:bool):
+    def min_value(self, board:Node, a:int, b:int, maximizingAgent:bool):
         minEvaluation = Node(None)
         minEvaluation.score = math.inf
 
@@ -77,14 +76,16 @@ class Agent:
             deepcopy.getCell(empty[i].xPos, empty[i].yPos).value = self.otherTeam
             deepcopyNode = Node(deepcopy)
             board.add_child(deepcopyNode)
-            evaluation = self.minimax_Descision(deepcopyNode, not maximizingAgent)
+            evaluation = self.minimax_Descision(deepcopyNode, a, b, not maximizingAgent)
             minEvaluation = self.min(minEvaluation, evaluation)
             minEvaluation.parent = board
+            # b = min(b, minEvaluation.score)
+            # if b <= a:
+            #     break
 
         return minEvaluation
 
-    # @returns: a grid
-    def max_value(self, board:Node, maximizingAgent:bool):
+    def max_value(self, board:Node, a:int, b:int, maximizingAgent:bool):
         maxEvaluation = Node(board.grid)
         maxEvaluation.score = -math.inf
 
@@ -94,8 +95,11 @@ class Agent:
             deepcopy.getCell(empty[i].xPos, empty[i].yPos).value = self.team
             deepcopyNode = Node(deepcopy)
             board.add_child(deepcopyNode)
-            evaluation = self.minimax_Descision(deepcopyNode, not maximizingAgent)
+            evaluation = self.minimax_Descision(deepcopyNode, a, b, not maximizingAgent)
             maxEvaluation = self.max(maxEvaluation, evaluation)
+            # a = max(a, maxEvaluation.score)
+            # if b <= a:
+            #     break
 
         return maxEvaluation
 
