@@ -61,10 +61,13 @@ class MainController:
     def varify_coords(self, coords:str, gameState:Grid):
         coords = coords.replace(" ", "").strip()
         
+        if len(coords) < 3:
+            return False
+
         try:
             int(coords[0])
             int(coords[2])
-        except ValueError:
+        except ValueError or IndexError:
             return False
 
         if int(coords[0]) >= 0 and int(coords[0]) <= 2 and int(coords[2]) >=0 and int(coords[2]) <= 2:
@@ -72,8 +75,10 @@ class MainController:
             cell = gameState.getCell(cell.xPos, cell.yPos)
             if cell.value == 'o' or cell.value == 'x':
                 return False
+            else: 
+                return True
 
-        return True
+        return False
 
     # extract coordinates from user input
     def get_xy(self, coords:str):
