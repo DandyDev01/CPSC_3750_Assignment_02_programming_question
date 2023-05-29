@@ -1,7 +1,5 @@
-from copy import deepcopy
 import math
 import random
-from statistics import NormalDist
 from Models.Grid import Grid
 from Models.Node import Node
 from Models.Tree import Tree
@@ -79,14 +77,14 @@ class Agent:
             evaluation = self.minimax_Descision(deepcopyNode, a, b, not maximizingAgent)
             minEvaluation = self.min(minEvaluation, evaluation)
             minEvaluation.parent = board
-            # b = min(b, minEvaluation.score)
-            # if b <= a:
-            #     break
+            b = min(b, evaluation.score)
+            if b < a:
+                break
 
         return minEvaluation
 
     def max_value(self, board:Node, a:int, b:int, maximizingAgent:bool):
-        maxEvaluation = Node(board.grid)
+        maxEvaluation = Node(None)
         maxEvaluation.score = -math.inf
 
         empty = board.grid.get_empty_cells()
@@ -97,9 +95,9 @@ class Agent:
             board.add_child(deepcopyNode)
             evaluation = self.minimax_Descision(deepcopyNode, a, b, not maximizingAgent)
             maxEvaluation = self.max(maxEvaluation, evaluation)
-            # a = max(a, maxEvaluation.score)
-            # if b <= a:
-            #     break
+            a = max(a, evaluation.score)
+            if b < a:
+                break
 
         return maxEvaluation
 

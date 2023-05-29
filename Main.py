@@ -15,6 +15,6 @@ mainController.run()
 
 # [o][x][x]
 
-# [x][o][o]
-
 # [x][o][x]
+
+# [o][x][o]1
